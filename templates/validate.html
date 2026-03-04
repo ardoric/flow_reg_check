@@ -1,0 +1,83 @@
+<head>
+	<title>Validador Licencas CPC</title>
+</head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+<body>
+
+{% if bad|length > 0 %}
+
+<h1>Inválidas ({{bad|length}})</h1>
+
+<table>
+	<tr>
+		<th>Razao</th>
+		<th>Licença</th>
+		<th>Condutor</th>
+		<th>Cao</th>
+		<th>Grau</th>
+		<th>Categoria</th>
+		<th>Data</th>
+	</tr>
+{% for item in bad %}
+	<tr>
+		<td>{{item.reason}}</td>
+		<td>{{item.dog['Licença']}}</td>
+		<td>{{item.dog['Handler (full name)']}}</td>
+		<td>{{item.dog['Cão']}}</td>
+		<td>{{item.dog['Grau']}}</td>
+		<td>{{item.dog['Categoria']}}</td>
+		<td>{{item.dog['Data da Prova']}}</td>
+	</tr>
+{% endfor %}
+</table>
+
+
+{% endif %}
+
+{% if warn|length > 0 %}
+
+<h1>Aviso ({{warn|length}})</h1>
+
+{% endif %}
+
+{% if good|length > 0 %}
+<h1>Boas ({{good|length}})</h1>
+
+<table>
+	<tr>
+		<th>Licença</th>
+		<th>Condutor</th>
+		<th>Cao</th>
+		<th>Grau</th>
+		<th>Categoria</th>
+		<th>Data</th>
+	</tr>
+{% for item in good %}
+	<tr>
+		<td>{{item['Licença']}}</td>
+		<td>{{item['Handler (full name)']}}</td>
+		<td>{{item['Cão']}}</td>
+		<td>{{item['Grau']}}</td>
+		<td>{{item['Categoria']}}</td>
+		<td>{{item['Data da Prova']}}</td>
+	</tr>
+{% endfor %}
+</table>
+{% endif %}
+
+</body>
