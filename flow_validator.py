@@ -41,7 +41,10 @@ FLOW_FIELDS = [
 
 with open("licencas.csv", newline='', encoding='utf-8') as file:
     reader = csv.DictReader(file)
-    licences = { l['Nº Licença']: l for l in reader}
+    # licenses by license number
+    licences = { l['Nº Licença']: l for l in reader }
+    lop_licences = { l['Nº Registo']: l for l in licences.values() }
+
 
 
 # registrations
@@ -116,18 +119,24 @@ def validate(registrations):
         dog['Agility License Number'] = dog['Agility License Number'].strip()
 
         if dog['Agility Federation'] != "CPC":
-        # if dog['Federação'] != "CPC":
             ignored.append(dog)
             continue
 
         if dog['Agility License Number'] not in licences:
-        # if dog['Licença'] not in licences:
-            bad.append({'dog': dog, 'reason': 'licença nao encontrada'})
+            # try by LOP
+            if dog['Dog Studbook Number'].strip() in lop_licences:
+                bad.append(
+                    {'dog': dog, 
+                     'reason': f"licença {dog['Agility License Number']} incorrecta. licença para {dog['Dog Studbook Number']} devia ser {lop_licences[dog['Dog Studbook Number'].strip()]['Nº Licença']}"
+                })
+            else:
+                bad.append({'dog': dog, 'reason': 'licença nao encontrada'})
             continue
         
         license = licences[dog['Agility License Number']]
+
+        # TODO: check licence expiration date against trial date instead
         if license['Válida'] != "SIM":
-        # if licences[dog['Licença']]['Válida'] != "SIM":
             bad.append({'dog': dog, 'reason': 'licença inválida'})
             continue
 
