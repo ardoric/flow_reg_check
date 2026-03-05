@@ -112,18 +112,18 @@ def validate(registrations):
 
     for dog in registrations:
 
-        # if dog['Agility Federation'] != "CPC":
-        if dog['Federação'] != "CPC":
+        if dog['Agility Federation'] != "CPC":
+        # if dog['Federação'] != "CPC":
             ignored.append(dog)
             continue
 
-        # if dog['Agility License Number'] not in licences:
-        if dog['Licença'] not in licences:
+        if dog['Agility License Number'] not in licences:
+        # if dog['Licença'] not in licences:
             bad.append({'dog': dog, 'reason': 'licença nao encontrada'})
             continue
 
-        # if licences[dog['Agility License Number']]['Válida'] != "SIM":
-        if licences[dog['Licença']]['Válida'] != "SIM":
+        if licences[dog['Agility License Number']]['Válida'] != "SIM":
+        # if licences[dog['Licença']]['Válida'] != "SIM":
             bad.append({'dog': dog, 'reason': 'licença inválida'})
             continue
 

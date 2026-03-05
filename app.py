@@ -19,7 +19,6 @@ def validate():
     request.files['file'].save(tf)
     tf.close()
     
-    with open(tf.name, newline='', encoding='utf-16') as file:
-        bad, warn, good, ignored =  flow_validator.validate(list(csv.DictReader(file, delimiter='\t')))
-        return render_template('validate.html', good=good, bad=bad,warn=warn, ignored=ignored)
+    bad, warn, good, ignored =  flow_validator.validate(flow_validator.parse_flow(tf.name))
+    return render_template('validate.html', good=good, bad=bad,warn=warn, ignored=ignored)
 

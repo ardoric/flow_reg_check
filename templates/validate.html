@@ -36,12 +36,12 @@ tr:nth-child(even) {
 {% for item in bad %}
 	<tr>
 		<td>{{item.reason}}</td>
-		<td>{{item.dog['Licença']}}</td>
+		<td>{{item.dog['Agility License Number']}}</td>
 		<td>{{item.dog['Handler (full name)']}}</td>
-		<td>{{item.dog['Cão']}}</td>
-		<td>{{item.dog['Grau']}}</td>
-		<td>{{item.dog['Categoria']}}</td>
-		<td>{{item.dog['Data da Prova']}}</td>
+		<td>{{item.dog['Dog Name']}}</td>
+		<td>{{item.dog['Grade']}}</td>
+		<td>{{item.dog['Category']}}</td>
+		<td>{{item.dog['Trial Date']}}</td>
 	</tr>
 {% endfor %}
 </table>
@@ -69,12 +69,12 @@ tr:nth-child(even) {
 	</tr>
 {% for item in good %}
 	<tr>
-		<td>{{item['Licença']}}</td>
+		<td>{{item['Agility License Number']}}</td>
 		<td>{{item['Handler (full name)']}}</td>
-		<td>{{item['Cão']}}</td>
-		<td>{{item['Grau']}}</td>
-		<td>{{item['Categoria']}}</td>
-		<td>{{item['Data da Prova']}}</td>
+		<td>{{item['Dog Name']}}</td>
+		<td>{{item['Grade']}}</td>
+		<td>{{item['Category']}}</td>
+		<td>{{item['Trial Date']}}</td>
 	</tr>
 {% endfor %}
 </table>
