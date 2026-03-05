@@ -21,7 +21,7 @@ tr:nth-child(even) {
 
 {% if bad|length > 0 %}
 
-<h1>Inválidas ({{bad|length}})</h1>
+<h2>Inválidas ({{bad|length}})</h2>
 
 <table>
 	<tr>
@@ -51,7 +51,7 @@ tr:nth-child(even) {
 
 {% if warn|length > 0 %}
 
-<h1>Aviso ({{warn|length}})</h1>
+<h2>Aviso ({{warn|length}})</h2>
 
 <table>
 	<tr>
@@ -80,7 +80,7 @@ tr:nth-child(even) {
 {% endif %}
 
 {% if good|length > 0 %}
-<h1>Boas ({{good|length}})</h1>
+<h2>Boas ({{good|length}})</h2>
 
 <table>
 	<tr>
@@ -103,5 +103,34 @@ tr:nth-child(even) {
 {% endfor %}
 </table>
 {% endif %}
+
+
+{% if ignored|length > 0 %}
+<h2>Nao Validadas ({{ignored|length}})</h2>
+
+<table>
+	<tr>
+		<th>Licença</th>
+		<th>Federacao</th>
+		<th>Condutor</th>
+		<th>Cao</th>
+		<th>Grau</th>
+		<th>Categoria</th>
+		<th>Data</th>
+	</tr>
+{% for item in ignored %}
+	<tr>
+		<td>{{item['Agility License Number']}}</td>
+		<td>{{item['Agility Federation']}}</td>
+		<td>{{item['Handler (full name)']}}</td>
+		<td>{{item['Dog Name']}}</td>
+		<td>{{item['Grade']}}</td>
+		<td>{{item['Category']}}</td>
+		<td>{{item['Trial Date']}}</td>
+	</tr>
+{% endfor %}
+</table>
+{% endif %}
+
 
 </body>
