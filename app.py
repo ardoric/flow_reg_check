@@ -16,7 +16,7 @@ def hello_world():
 @app.post("/validate")
 def validate():
     tf = tempfile.NamedTemporaryFile(delete_on_close=False)
-    tf.write(request.files['file'].read())
+    request.files['file'].save(tf)
     tf.close()
     
     with open(tf.name, newline='', encoding='utf-16') as file:
