@@ -53,6 +53,30 @@ tr:nth-child(even) {
 
 <h1>Aviso ({{warn|length}})</h1>
 
+<table>
+	<tr>
+		<th>Razao</th>
+		<th>Licença</th>
+		<th>Condutor</th>
+		<th>Cao</th>
+		<th>Grau</th>
+		<th>Categoria</th>
+		<th>Data</th>
+	</tr>
+{% for item in warn %}
+	<tr>
+		<td>{{item.reason}}</td>
+		<td>{{item.dog['Agility License Number']}}</td>
+		<td>{{item.dog['Handler (full name)']}}</td>
+		<td>{{item.dog['Dog Name']}}</td>
+		<td>{{item.dog['Grade']}}</td>
+		<td>{{item.dog['Category']}}</td>
+		<td>{{item.dog['Trial Date']}}</td>
+	</tr>
+{% endfor %}
+</table>
+
+
 {% endif %}
 
 {% if good|length > 0 %}

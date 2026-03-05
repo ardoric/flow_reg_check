@@ -121,10 +121,17 @@ def validate(registrations):
         # if dog['Licença'] not in licences:
             bad.append({'dog': dog, 'reason': 'licença nao encontrada'})
             continue
-
-        if licences[dog['Agility License Number']]['Válida'] != "SIM":
+        
+        license = licences[dog['Agility License Number']]
+        if license['Válida'] != "SIM":
         # if licences[dog['Licença']]['Válida'] != "SIM":
             bad.append({'dog': dog, 'reason': 'licença inválida'})
+            continue
+
+        if dog['Grade'] != license['Grau']:
+            warning.append(
+                    {'dog': dog, 'reason': f"grau inconsistente. licença: {license['Grau']}, prova: {dog['Grade']}"}
+            )
             continue
 
         good.append(dog)
