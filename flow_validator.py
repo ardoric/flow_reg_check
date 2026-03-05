@@ -1,6 +1,44 @@
 import csv
 
 
+FLOW_FIELDS = [
+    'Dorsal',
+    'Handler (first name)',
+    'Handler (last name)',
+    'Email',
+    'Dog Microchip',
+    'Dog Name',
+    'Dog Date of Birth',
+    'Dog Gender',
+    'Dog in Season',
+    'Dog Height',
+    'Dog Breed',
+    'Dog Studbook Name',
+    'Dog Studbook Number',
+    'Dog Studbook Federation',
+    'Agility Club',
+    'Agility License Number',
+    'Agility Federation',
+    'Agility Country',
+    'No Agility License',
+    'Participant Type',
+    'NP',
+    'Trial Name',
+    'Trial Date',
+    'Handler',
+    'Grade',
+    'Category',
+    'Team Requested',
+    'Team Assigned',
+    'Participant Observations',
+    'Organizer Observations',
+    'Flagged',
+    'Status',
+    'Registered at',
+    'Handler (full name)'
+]
+
+
 with open("licencas.csv", newline='', encoding='utf-8') as file:
     reader = csv.DictReader(file)
     licences = { l['Nº Licença']: l for l in reader}
@@ -41,6 +79,14 @@ with open("licencas.csv", newline='', encoding='utf-8') as file:
 # Status                     | Estado
 # Registered at              | Data de inscrição
 # Handler (full name)
+
+def parse_flow(fname):
+    with open(fname, newline='', encoding='utf-16') as f:
+        reader = csv.DictReader(f, fieldnames=FLOW_FIELDS, delimiter='\t')
+        # skip the headers
+        next(reader)
+        return list(reader)
+
 
 # licences
 # Grau
