@@ -111,6 +111,9 @@ def validate(registrations):
 
 
     for dog in registrations:
+        # remove white space
+        # aka, the Peach case
+        dog['Agility License Number'] = dog['Agility License Number'].strip()
 
         if dog['Agility Federation'] != "CPC":
         # if dog['Federação'] != "CPC":

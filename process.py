@@ -18,5 +18,6 @@ if __name__ == "__main__":
 
     for dog in bad:
         print (dog['reason'], dog['dog']['Dog Name'])
+        print (dog)
 
     print (len(bad), len(warning), len(good))
