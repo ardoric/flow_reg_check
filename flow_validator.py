@@ -1,5 +1,6 @@
 import csv
-
+import datetime
+import time
 
 FLOW_FIELDS = [
     'Dorsal',
@@ -45,7 +46,9 @@ with open("licencas.csv", newline='', encoding='utf-8') as file:
     licences = { l['Nº Licença']: l for l in reader }
     lop_licences = { l['Nº Registo']: l for l in licences.values() }
 
-
+def parse_date(strdate):
+    # date.strptime my beloved only available in 3.14
+    return datetime.date(*(time.strptime(strdate,'%d/%m/%Y')[0:3]))
 
 # registrations
 # Dorsal
@@ -135,9 +138,9 @@ def validate(registrations):
         
         license = licences[dog['Agility License Number']]
 
-        # TODO: check licence expiration date against trial date instead
-        if license['Válida'] != "SIM":
-            bad.append({'dog': dog, 'reason': 'licença inválida'})
+        # not checking licence date for G0 dogs
+        if dog['Grade'] != 'G0' and parse_date(license['Validade']) < datetime.date.fromisoformat(dog['Trial Date']):
+            bad.append({'dog': dog, 'reason': 'licença nao valida a data da prova. data prova: {dog["Trial Date"]} licença expira: {license["Validade"]}'})
             continue
 
         if dog['Grade'] != license['Grau']:
