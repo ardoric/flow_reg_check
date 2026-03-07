@@ -153,6 +153,12 @@ def validate(registrations):
         if dog['Grade'] != 'G0' and parse_date(license['Validade']) < datetime.date.fromisoformat(dog['Trial Date']):
             bad.append({'dog': dog, 'reason': 'licença nao valida a data da prova. data prova: {dog["Trial Date"]} licença expira: {license["Validade"]}'})
             continue
+        
+        # check that license matches dog registration
+        if dog['Dog Studbook Number'].strip() and dog['Dog Studbook Federation'] == 'Clube Português de Canicultura':
+            if dog['Dog Studbook Number'].replace(' ', '').strip().lower() != license['Nº Registo'].replace(' ','').strip().lower():
+                bad.append({'dog': dog, 'reason': f"Nº registo da licença {license['Nº Registo']} nao corresponde ao nº registo na prova {dog['Dog Studbook Number']}"})
+                continue
 
         if dog['Grade'] != license['Grau']:
             warning.append(
