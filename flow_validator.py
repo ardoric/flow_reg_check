@@ -109,6 +109,17 @@ def parse_flow(fname):
 # CLASSE
 # Medição Efetuada
 
+# maps classes in licenses for classes in flow
+# leaving design space for S+M or I+L and that kind of things
+# no example in the liceses for a XS dog so I'm assuming the license is for SMALL (S)
+classes = {
+        "SMALL (S)"       : ["XS+S (XS)", "XS+S (S)", "S", "XS"],
+        "MEDIUM (M)"      : ["M"], 
+        "INTERMEDIATE (I)": ["I"],
+        "LARGE (L)"       : ["L"]
+}
+
+
 def validate(registrations):
     good     = []
     bad      = []
@@ -148,6 +159,16 @@ def validate(registrations):
                     {'dog': dog, 'reason': f"grau inconsistente. licença: {license['Grau']}, prova: {dog['Grade']}"}
             )
             continue
+
+        # some dogs don't have class assigned in the license
+        if license['CLASSE'].strip() in classes:
+            if dog['Category'] not in classes[license['CLASSE'].strip()]:
+                warning.append(
+                    { 'dog': dog,
+                      'reason': f"Categoria da licença {license['CLASSE']} nao corresponde a categoria de inscricao {dog['Category']}"
+                    }
+                )
+                continue
         
         # no issues found
         good.append(dog)
