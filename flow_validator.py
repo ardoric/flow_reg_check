@@ -148,7 +148,8 @@ def validate(registrations):
                     {'dog': dog, 'reason': f"grau inconsistente. licença: {license['Grau']}, prova: {dog['Grade']}"}
             )
             continue
-
+        
+        # no issues found
         good.append(dog)
     return ( bad, warning, good, ignored)
 
