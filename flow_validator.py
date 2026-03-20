@@ -138,10 +138,10 @@ def validate(registrations):
 
         if dog['Agility License Number'] not in licences:
             # try by LOP
-            if dog['Dog Studbook Number'].strip() in lop_licences:
+            if dog['Dog Studbook Number'].strip().upper() in lop_licences:
                 bad.append(
                     {'dog': dog, 
-                     'reason': f"licença {dog['Agility License Number']} incorrecta. licença para {dog['Dog Studbook Number']} devia ser {lop_licences[dog['Dog Studbook Number'].strip()]['Nº Licença']}"
+                     'reason': f"licença {dog['Agility License Number']} incorrecta. licença para {dog['Dog Studbook Number']} devia ser {lop_licences[dog['Dog Studbook Number'].strip().upper()]['Nº Licença']}"
                 })
             else:
                 bad.append({'dog': dog, 'reason': 'licença nao encontrada'})
