@@ -160,7 +160,8 @@ def validate(registrations):
                 bad.append({'dog': dog, 'reason': f"Nº registo da licença {license['Nº Registo']} nao corresponde ao nº registo na prova {dog['Dog Studbook Number']}"})
                 continue
 
-        if dog['Grade'] != license['Grau']:
+        # don't do grade check for INF handlers
+        if dog['Handler'] != "INF" and dog['Grade'] != license['Grau']:
             warning.append(
                     {'dog': dog, 'reason': f"grau inconsistente. licença: {license['Grau']}, prova: {dog['Grade']}"}
             )
