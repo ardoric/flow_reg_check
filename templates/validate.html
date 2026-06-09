@@ -1,138 +1,340 @@
+<!DOCTYPE html>
+<html lang="pt">
 <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Validador Licencas CPC</title>
+	<style>
+		* {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+			background-color: #f1f3f4;
+			min-height: 100vh;
+			color: #202124;
+		}
+
+		.header {
+			background-color: #1a7a3c;
+			color: #ffffff;
+			padding: 18px 24px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+		}
+
+		.header h1 {
+			font-size: 22px;
+			font-weight: 700;
+			letter-spacing: 0.2px;
+		}
+
+		.container {
+			max-width: 1100px;
+			margin: 0 auto;
+			padding: 40px 16px;
+			display: flex;
+			flex-direction: column;
+			gap: 24px;
+		}
+
+		.card {
+			background-color: #ffffff;
+			border-radius: 8px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+			overflow: hidden;
+		}
+
+		.card-title {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 18px 24px;
+			font-size: 18px;
+			font-weight: 700;
+			border-left: 5px solid #5f6368;
+		}
+
+		.card-title .count {
+			font-size: 14px;
+			font-weight: 600;
+			color: #5f6368;
+			background-color: #f1f3f4;
+			border-radius: 12px;
+			padding: 2px 10px;
+		}
+
+		.card.bad .card-title { border-left-color: #d93025; color: #c5221f; }
+		.card.warn .card-title { border-left-color: #f9ab00; color: #b06000; }
+		.card.good .card-title { border-left-color: #1a7a3c; color: #166633; }
+		.card.ignored .card-title { border-left-color: #5f6368; color: #3c4043; }
+
+		.table-wrap {
+			overflow-x: auto;
+		}
+
+		table {
+			width: 100%;
+			border-collapse: collapse;
+			font-size: 14px;
+		}
+
+		th {
+			background-color: #fafafa;
+			text-align: left;
+			padding: 12px 16px;
+			font-weight: 600;
+			color: #3c4043;
+			border-bottom: 1px solid #e0e0e0;
+			white-space: nowrap;
+		}
+
+		td {
+			padding: 12px 16px;
+			border-bottom: 1px solid #eeeeee;
+			color: #202124;
+		}
+
+		tbody tr:nth-child(even) {
+			background-color: #fafafa;
+		}
+
+		tbody tr:hover {
+			background-color: #f1f3f4;
+		}
+
+		.empty {
+			text-align: center;
+			color: #5f6368;
+			padding: 24px;
+		}
+
+		.back-link {
+			display: inline-block;
+			margin-top: 8px;
+			color: #1a7a3c;
+			text-decoration: none;
+			font-weight: 600;
+			font-size: 14px;
+		}
+
+		.back-link:hover {
+			text-decoration: underline;
+		}
+
+		.summary {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 16px;
+		}
+
+		.summary-item {
+			flex: 1 1 0;
+			min-width: 140px;
+			background-color: #ffffff;
+			border-radius: 8px;
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.08);
+			padding: 18px 20px;
+			border-top: 4px solid #5f6368;
+		}
+
+		.summary-item .num {
+			font-size: 32px;
+			font-weight: 700;
+			line-height: 1;
+		}
+
+		.summary-item .lbl {
+			font-size: 13px;
+			font-weight: 600;
+			color: #5f6368;
+			margin-top: 6px;
+			text-transform: uppercase;
+			letter-spacing: 0.4px;
+		}
+
+		.summary-item.bad { border-top-color: #d93025; }
+		.summary-item.bad .num { color: #c5221f; }
+		.summary-item.warn { border-top-color: #f9ab00; }
+		.summary-item.warn .num { color: #b06000; }
+		.summary-item.good { border-top-color: #1a7a3c; }
+		.summary-item.good .num { color: #166633; }
+		.summary-item.ignored { border-top-color: #5f6368; }
+		.summary-item.ignored .num { color: #3c4043; }
+		.summary-item.total { border-top-color: #1a73e8; }
+		.summary-item.total .num { color: #1a73e8; }
+	</style>
 </head>
-<style>
-table {
-  font-family: arial, sans-serif;
-  border-collapse: collapse;
-}
-
-td, th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
-}
-
-tr:nth-child(even) {
-  background-color: #dddddd;
-}
-</style>
 <body>
+	<div class="header">
+		<h1>Validador Licenças CPC</h1>
+	</div>
 
-{% if bad|length > 0 %}
+	<div class="container">
 
-<h2>Inválidas ({{bad|length}})</h2>
+		<div class="summary">
+			<div class="summary-item total">
+				<div class="num">{{ (bad|length) + (warn|length) + (good|length) + (ignored|length) }}</div>
+				<div class="lbl">Total</div>
+			</div>
+			<div class="summary-item good">
+				<div class="num">{{ good|length }}</div>
+				<div class="lbl">Boas</div>
+			</div>
+			<div class="summary-item warn">
+				<div class="num">{{ warn|length }}</div>
+				<div class="lbl">Aviso</div>
+			</div>
+			<div class="summary-item bad">
+				<div class="num">{{ bad|length }}</div>
+				<div class="lbl">Inválidas</div>
+			</div>
+			<div class="summary-item ignored">
+				<div class="num">{{ ignored|length }}</div>
+				<div class="lbl">Não Validadas</div>
+			</div>
+		</div>
 
-<table>
-	<tr>
-		<th>Razao</th>
-		<th>Licença</th>
-		<th>Condutor</th>
-		<th>Cao</th>
-		<th>Nº Registo</th>
-		<th>Grau</th>
-		<th>Categoria</th>
-		<th>Data</th>
-	</tr>
-{% for item in bad %}
-	<tr>
-		<td>{{item.reason}}</td>
-		<td>{{item.dog['Agility License Number']}}</td>
-		<td>{{item.dog['Handler (full name)']}}</td>
-		<td>{{item.dog['Dog Name']}}</td>
-		<td>{{item.dog['Dog Studbook Number']}}</td>
-		<td>{{item.dog['Grade']}}</td>
-		<td>{{item.dog['Category']}}</td>
-		<td>{{item.dog['Trial Date']}}</td>
-	</tr>
-{% endfor %}
-</table>
+		{% if bad|length > 0 %}
+		<div class="card bad">
+			<div class="card-title">Inválidas <span class="count">{{bad|length}}</span></div>
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th>Razão</th>
+							<th>Licença</th>
+							<th>Condutor</th>
+							<th>Cão</th>
+							<th>Nº Registo</th>
+							<th>Grau</th>
+							<th>Categoria</th>
+							<th>Data</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for item in bad %}
+						<tr>
+							<td>{{item.reason}}</td>
+							<td>{{item.dog['Agility License Number']}}</td>
+							<td>{{item.dog['Handler (full name)']}}</td>
+							<td>{{item.dog['Dog Name']}}</td>
+							<td>{{item.dog['Dog Studbook Number']}}</td>
+							<td>{{item.dog['Grade']}}</td>
+							<td>{{item.dog['Category']}}</td>
+							<td>{{item.dog['Trial Date']}}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{% endif %}
 
+		{% if warn|length > 0 %}
+		<div class="card warn">
+			<div class="card-title">Aviso <span class="count">{{warn|length}}</span></div>
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th>Razão</th>
+							<th>Licença</th>
+							<th>Condutor</th>
+							<th>Cão</th>
+							<th>Grau</th>
+							<th>Categoria</th>
+							<th>Data</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for item in warn %}
+						<tr>
+							<td>{{item.reason}}</td>
+							<td>{{item.dog['Agility License Number']}}</td>
+							<td>{{item.dog['Handler (full name)']}}</td>
+							<td>{{item.dog['Dog Name']}}</td>
+							<td>{{item.dog['Grade']}}</td>
+							<td>{{item.dog['Category']}}</td>
+							<td>{{item.dog['Trial Date']}}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{% endif %}
 
-{% endif %}
+		{% if good|length > 0 %}
+		<div class="card good">
+			<div class="card-title">Boas <span class="count">{{good|length}}</span></div>
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th>Licença</th>
+							<th>Condutor</th>
+							<th>Cão</th>
+							<th>Grau</th>
+							<th>Categoria</th>
+							<th>Data</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for item in good %}
+						<tr>
+							<td>{{item['Agility License Number']}}</td>
+							<td>{{item['Handler (full name)']}}</td>
+							<td>{{item['Dog Name']}}</td>
+							<td>{{item['Grade']}}</td>
+							<td>{{item['Category']}}</td>
+							<td>{{item['Trial Date']}}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{% endif %}
 
-{% if warn|length > 0 %}
+		{% if ignored|length > 0 %}
+		<div class="card ignored">
+			<div class="card-title">Não Validadas <span class="count">{{ignored|length}}</span></div>
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th>Licença</th>
+							<th>Federação</th>
+							<th>Condutor</th>
+							<th>Cão</th>
+							<th>Grau</th>
+							<th>Categoria</th>
+							<th>Data</th>
+						</tr>
+					</thead>
+					<tbody>
+					{% for item in ignored %}
+						<tr>
+							<td>{{item['Agility License Number']}}</td>
+							<td>{{item['Agility Federation']}}</td>
+							<td>{{item['Handler (full name)']}}</td>
+							<td>{{item['Dog Name']}}</td>
+							<td>{{item['Grade']}}</td>
+							<td>{{item['Category']}}</td>
+							<td>{{item['Trial Date']}}</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+		{% endif %}
 
-<h2>Aviso ({{warn|length}})</h2>
+		<a class="back-link" href="/">&larr; Validar outro ficheiro</a>
 
-<table>
-	<tr>
-		<th>Razao</th>
-		<th>Licença</th>
-		<th>Condutor</th>
-		<th>Cao</th>
-		<th>Grau</th>
-		<th>Categoria</th>
-		<th>Data</th>
-	</tr>
-{% for item in warn %}
-	<tr>
-		<td>{{item.reason}}</td>
-		<td>{{item.dog['Agility License Number']}}</td>
-		<td>{{item.dog['Handler (full name)']}}</td>
-		<td>{{item.dog['Dog Name']}}</td>
-		<td>{{item.dog['Grade']}}</td>
-		<td>{{item.dog['Category']}}</td>
-		<td>{{item.dog['Trial Date']}}</td>
-	</tr>
-{% endfor %}
-</table>
-
-
-{% endif %}
-
-{% if good|length > 0 %}
-<h2>Boas ({{good|length}})</h2>
-
-<table>
-	<tr>
-		<th>Licença</th>
-		<th>Condutor</th>
-		<th>Cao</th>
-		<th>Grau</th>
-		<th>Categoria</th>
-		<th>Data</th>
-	</tr>
-{% for item in good %}
-	<tr>
-		<td>{{item['Agility License Number']}}</td>
-		<td>{{item['Handler (full name)']}}</td>
-		<td>{{item['Dog Name']}}</td>
-		<td>{{item['Grade']}}</td>
-		<td>{{item['Category']}}</td>
-		<td>{{item['Trial Date']}}</td>
-	</tr>
-{% endfor %}
-</table>
-{% endif %}
-
-
-{% if ignored|length > 0 %}
-<h2>Nao Validadas ({{ignored|length}})</h2>
-
-<table>
-	<tr>
-		<th>Licença</th>
-		<th>Federacao</th>
-		<th>Condutor</th>
-		<th>Cao</th>
-		<th>Grau</th>
-		<th>Categoria</th>
-		<th>Data</th>
-	</tr>
-{% for item in ignored %}
-	<tr>
-		<td>{{item['Agility License Number']}}</td>
-		<td>{{item['Agility Federation']}}</td>
-		<td>{{item['Handler (full name)']}}</td>
-		<td>{{item['Dog Name']}}</td>
-		<td>{{item['Grade']}}</td>
-		<td>{{item['Category']}}</td>
-		<td>{{item['Trial Date']}}</td>
-	</tr>
-{% endfor %}
-</table>
-{% endif %}
-
-
+	</div>
 </body>
+</html>
