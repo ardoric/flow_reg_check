@@ -150,7 +150,7 @@ def validate(registrations):
         license = licences[dog['Agility License Number']]
 
         # not checking licence date for G0 dogs
-        if dog['Grade'] != 'G0' and parse_date(license['Validade']) < datetime.date.fromisoformat(dog['Trial Date']):
+        if dog['Grade'] != 'G0' and license['Grau'] != 'G0' and parse_date(license['Validade']) < datetime.date.fromisoformat(dog['Trial Date']):
             bad.append({'dog': dog, 'reason': f'licença nao valida a data da prova. data prova: {dog["Trial Date"]} licença expira: {license["Validade"]}'})
             continue
         
