@@ -119,6 +119,13 @@
 		button[type="submit"]:hover {
 			background-color: #166633;
 		}
+
+		.help-link {
+			display: inline-block;
+			margin-top: 20px;
+			color: #1a7a3c;
+			font-size: 14px;
+		}
 	</style>
 </head>
 <body>
@@ -144,6 +151,7 @@
 				<input type="file" id="file" name="file">
 				<button type="submit">Validar</button>
 			</form>
+			<a class="help-link" href="{{ url_for('static', filename='help.html') }}">Como obter o ficheiro para validar?</a>
 		</div>
 	</div>
 </body>
