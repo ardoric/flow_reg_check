@@ -106,7 +106,7 @@ def parse_flow(fname):
 # Data Início G1
 # Data Pagamento
 # Validade
-# CLASSE
+# Classe
 # Medição Efetuada
 
 # maps classes in licenses for classes in flow
@@ -168,11 +168,11 @@ def validate(registrations):
             continue
 
         # some dogs don't have class assigned in the license
-        if license['CLASSE'].strip() in classes:
-            if dog['Category'] not in classes[license['CLASSE'].strip()]:
+        if license['Classe'].strip() in classes:
+            if dog['Category'] not in classes[license['Classe'].strip()]:
                 warning.append(
                     { 'dog': dog,
-                      'reason': f"Categoria da licença {license['CLASSE']} nao corresponde a categoria de inscricao {dog['Category']}"
+                      'reason': f"Categoria da licença {license['Classe']} nao corresponde a categoria de inscricao {dog['Category']}"
                     }
                 )
                 continue
